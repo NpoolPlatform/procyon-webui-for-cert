@@ -1,0 +1,6 @@
+commonLabels:
+  # app: procyon-webui-v2
+
+resources:
+  - 01-procyon-webui.yaml
+  - 02-ingress.yaml

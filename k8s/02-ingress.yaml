@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: procyon-webui-cert-ingress
+  namespace: kube-system
+  annotations:
+    k8s.kuboard.cn/displayName: procyon-webui-cert
+    k8s.kuboard.cn/workload: procyon-webui-cert
+    kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure, web
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-http-redirect-https@kubernetescrd,
+                                                      kube-system-http-redirect-https-testing@kubernetescrd,
+                                                      kube-system-common-headers@kubernetescrd
+
+spec:
+  tls:
+    - hosts:
+        - www.npool.online
+        - npool.online
+      secretName: npool-online-tls
+  rules:
+    - host: www.npool.online
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: procyon-webui-cert
+              servicePort: 80
+    - host: npool.online
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: procyon-webui-cert
+              servicePort: 80
