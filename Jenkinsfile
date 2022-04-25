@@ -14,8 +14,8 @@ pipeline {
       steps {
         sh (returnStdout: false, script: '''
           /root/.nvm/versions/node/v16.0.0/bin/npm install --global yarn
-          yarn global add @quasar/cli
-          quasar build
+          /root/.nvm/versions/node/v16.0.0/bin/yarn
+          /usr/local/bin/quasar build
         '''.stripIndent())
       }
     }
@@ -52,8 +52,8 @@ pipeline {
           git reset --hard
           git checkout $tag
           /root/.nvm/versions/node/v16.0.0/bin/npm install --global yarn
-          yarn global add @quasar/cli
-          quasar build
+          /root/.nvm/versions/node/v16.0.0/bin/yarn
+          /usr/local/bin/quasar build
           docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui-cert:$tag .
         '''.stripIndent())
       }
