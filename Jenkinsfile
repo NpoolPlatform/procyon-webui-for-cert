@@ -13,19 +13,8 @@ pipeline {
       }
       steps {
         sh (returnStdout: false, script: '''
-          set +e
-          PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin command quasar
-          rc=$?
-          set -e
-          if [ ! $rc -eq 0 ]; then
-            n latest
-            PATH=/usr/local/bin:$PATH npm i -g mirror-config-china --registry=https://registry.npm.taobao.org
-            PATH=/usr/local/bin:$PATH npm install --global --registry https://registry.npm.taobao.org yarn
-            PATH=/usr/local/bin:$PATH yarn config set registry 'https://registry.npm.taobao.org'
-            PATH=/usr/local/bin:$PATH yarn add global quasar-cli@latest
-          fi
-          PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin yarn install --registry https://registry.npm.taobao.org/
-          PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin quasar build
+            yarn
+            quasar build
         '''.stripIndent())
       }
     }
@@ -61,19 +50,8 @@ pipeline {
           tag=`git describe --tags $revlist`
           git reset --hard
           git checkout $tag
-          set +e
-          PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin command quasar
-          rc=$?
-          set -e
-          if [ ! $rc -eq 0 ]; then
-            n latest
-            PATH=/usr/local/bin:$PATH npm i -g mirror-config-china --registry=https://registry.npm.taobao.org
-            PATH=/usr/local/bin:$PATH npm install --global --registry https://registry.npm.taobao.org yarn
-            PATH=/usr/local/bin:$PATH yarn config set registry 'https://registry.npm.taobao.org'
-            PATH=/usr/local/bin:$PATH yarn add global quasar-cli@latest
-          fi
-          PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin yarn install --registry https://registry.npm.taobao.org/
-          PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin quasar build
+          yarn
+          quasar build
           docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui-cert:$tag .
         '''.stripIndent())
       }
