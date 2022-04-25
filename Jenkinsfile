@@ -13,8 +13,9 @@ pipeline {
       }
       steps {
         sh (returnStdout: false, script: '''
-            yarn
-            quasar build
+          npm install --global yarn
+          yarn global add @quasar/cli
+          quasar build
         '''.stripIndent())
       }
     }
@@ -50,7 +51,8 @@ pipeline {
           tag=`git describe --tags $revlist`
           git reset --hard
           git checkout $tag
-          yarn
+          npm install --global yarn
+          yarn global add @quasar/cli
           quasar build
           docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui-cert:$tag .
         '''.stripIndent())
